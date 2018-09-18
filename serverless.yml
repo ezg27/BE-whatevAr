@@ -1,0 +1,15 @@
+service: whatevar
+region: eu-3
+package:
+  include:
+   - node_modules/**
+provider:
+    name: aws
+    runtime: nodejs8.10
+functions:
+  fetch:
+    handler: handler.getYelp
+    events:
+      - http:
+          path: api/businesses
+          method: get
