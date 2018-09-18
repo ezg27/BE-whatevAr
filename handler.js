@@ -2,45 +2,42 @@
 const yelpKey = require('./config');
 const axios = require('axios');
 
-const vals = {
-  latitude: 53.4863,
-  longitude: -2.2397
+module.exports.deviceData = async event => {
+  const result = await getYelp(JSON.parse(event.body));
+  return result;
 };
 
-module.exports.deviceData = (event, context, callback) => {
-  const obj = {
-    statusCode: 200,
-    body: JSON.stringify(event.body)
-  };
-  callback(null, obj);
-}
-
-module.exports.getYelp = (event, context, callback) => {
+const getYelp = ({ latitude, longitude }) => {
   const config = {
     headers: {
       Authorization: yelpKey
     },
     params: {
-      latitude: vals.latitude,
-      longitude: vals.longitude,
+      latitude: latitude,
+      longitude: longitude,
       radius: 100,
       categories: 'bars,restaurants'
     }
   };
-  axios.get('https://api.yelp.com/v3/businesses/search', config).then(res => {
-    const obj = {
-      statusCode: 200,
-      body: JSON.stringify(conversion(res.data.businesses))
-    };
-    callback(null, obj);
-  })
+  return axios
+    .get('https://api.yelp.com/v3/businesses/search', config)
+    .then(res => {
+      console.log('cheese danish');
+      return {
+        statusCode: 200,
+        body: JSON.stringify(
+          conversion(res.data.businesses, latitude, longitude)
+        )
+      };
+    })
+    .catch(() => console.log('egggggsssss'));
 };
 
-const conversion = businesses => {
+const conversion = (businesses, latitude, longitude) => {
   return businesses.map(business => {
     business.position = transformPointToAR(
-      vals.latitude,
-      vals.longitude,
+      latitude,
+      longitude,
       business.coordinates.latitude,
       business.coordinates.longitude
     );

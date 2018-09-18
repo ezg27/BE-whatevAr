@@ -7,12 +7,6 @@ provider:
     name: aws
     runtime: nodejs8.10
 functions:
-  fetch:
-    handler: handler.getYelp
-    events:
-      - http:
-          path: api/businesses
-          method: get
   send:
     handler: handler.deviceData
     events:
