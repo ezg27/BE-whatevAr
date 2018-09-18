@@ -7,6 +7,14 @@ const vals = {
   longitude: -2.2397
 };
 
+module.exports.deviceData = (event, context, callback) => {
+  const obj = {
+    statusCode: 200,
+    body: JSON.stringify(event.body)
+  };
+  callback(null, obj);
+}
+
 module.exports.getYelp = (event, context, callback) => {
   const config = {
     headers: {

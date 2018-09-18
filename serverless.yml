@@ -13,3 +13,9 @@ functions:
       - http:
           path: api/businesses
           method: get
+  send:
+    handler: handler.deviceData
+    events:
+      - http:
+          path: api/device
+          method: post
