@@ -17,7 +17,6 @@ module.exports.getYelp = ({ lat, long }) => {
   return axios
     .get('https://api.yelp.com/v3/businesses/search', config)
     .then(res => {
-      console.log('cheese danish');
       return {
         statusCode: 200,
         body: JSON.stringify(conversion(res.data.businesses, lat, long))
