@@ -13,7 +13,7 @@ provider:
     name: aws
     runtime: nodejs8.10
 functions:
-  send:
+  getYelp:
     handler: handler.deviceData
     events:
       - http:
@@ -23,3 +23,12 @@ functions:
             paths:
               lat: true
               long: true
+  getBusiness:
+    handler: handler.getBusiness
+    events:
+      - http:
+          path: api/device/business/{id}
+          method: get
+          parameters:
+            paths:
+              id: true
