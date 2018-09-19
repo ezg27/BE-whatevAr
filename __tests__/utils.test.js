@@ -56,5 +56,6 @@ describe('conversion', () => {
   test('returns objects with position property', () => {
     expect(conversion(val, 53.4863, -2.2397)).toHaveProperty('a.position');
     expect(Array.isArray(funcCall.a.position)).toBe(true);
+    expect(funcCall.a.position[0]).toBe(-52.86783247886342);
   });
 });
