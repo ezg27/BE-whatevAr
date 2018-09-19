@@ -1,9 +1,11 @@
+'use strict';
 const { conversion, latLongToMerc, transformPointToAR } = require('../utils');
 
 describe('latLongToMerc', () => {
   test('returns an object', () => {
-    expect(typeof latLongToMerc()).toBe('object');
-    expect(latLongToMerc()).not.toBeNull();
+    const funcCall = latLongToMerc();
+    expect(typeof funcCall).toBe('object');
+    expect(funcCall).not.toBeNull();
   });
   test('converts latitude and longitude coordinates to relative metre values', () => {
     expect(latLongToMerc(53.4863, -2.2397)).toEqual({
@@ -14,14 +16,15 @@ describe('latLongToMerc', () => {
 });
 
 describe('transformPointToAR', () => {
+  const funcCall = transformPointToAR();
   test('returns an array', () => {
-    expect(Array.isArray(transformPointToAR())).toBe(true);
+    expect(Array.isArray(funcCall)).toBe(true);
   });
   test('returns an array of length 3', () => {
-    expect(transformPointToAR()).toHaveLength(3);
+    expect(funcCall).toHaveLength(3);
   });
   test('returns an array of falsy values when parameters not passed', () => {
-    expect(transformPointToAR()).toEqual([NaN, 0, NaN]);
+    expect(funcCall).toEqual([NaN, 0, NaN]);
   });
   test('returns an array of integers', () => {
     expect(
@@ -40,18 +43,18 @@ describe('conversion', () => {
       }
     }
   ];
+  const funcCall = conversion(val, 53.4863, -2.2397);
   test('returns an object', () => {
-    expect(typeof conversion(val, 53.4863, -2.2397)).toBe('object');
+    expect(typeof funcCall).toBe('object');
     expect(conversion()).toBeUndefined();
   });
   test('returns an object of objects', () => {
-    expect(typeof Object.values(conversion(val, 53.4863, -2.2397))[0]).toBe(
+    expect(typeof Object.values(funcCall)[0]).toBe(
       'object'
     );
   });
   test('returns objects with position property', () => {
     expect(conversion(val, 53.4863, -2.2397)).toHaveProperty('a.position');
-    // expect(conversion(val, 53.4863, -2.2397).a.position).('a.position');
-    expect()
+    expect(Array.isArray(funcCall.a.position)).toBe(true);
   });
 });
