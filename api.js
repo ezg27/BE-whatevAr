@@ -24,3 +24,19 @@ module.exports.getYelp = ({ lat, long }) => {
     })
     .catch(() => console.log('egggggsssss'));
 };
+
+module.exports.getBusinessData = ({ id }) => {
+  console.log(id)
+  const config = {
+    headers: {
+      Authorization: yelpKey
+    }
+  };
+  return axios.get(`https://api.yelp.com/v3/businesses/${id}`, config)
+  .then(res => {
+    return {
+      statusCode: 200,
+      body: JSON.stringify(res.data)
+    }
+  }).catch(console.log)
+}
