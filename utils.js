@@ -1,4 +1,5 @@
-module.exports.conversion = (businesses, latitude, longitude) => {
+const conversion = (businesses, latitude, longitude) => {
+  if (!businesses) return;
   return businesses.reduce((acc, business) => {
     business.position = transformPointToAR(
       latitude,
@@ -32,3 +33,5 @@ const transformPointToAR = (
   const objFinalPosX = objPoint.x - devicePoint.x;
   return [objFinalPosX, 0, -objFinalPosZ];
 };
+
+module.exports = { conversion, latLongToMerc, transformPointToAR };
