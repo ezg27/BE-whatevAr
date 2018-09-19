@@ -1,5 +1,5 @@
 const fakeData = {
-  'W1bb3agzrK1VwXDpC-9MyQ': {
+  '1': {
     id: 'W1bb3agzrK1VwXDpC-9MyQ',
     alias: 'the-printworks-manchester',
     name: 'The Printworks',
