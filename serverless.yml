@@ -1,15 +1,34 @@
 service: whatevar
 region: eu-3
 package:
-  include:
+  exclude:
    - node_modules/**
+  include:
+   - node_modules/axios/**
+   - node_modules/debug/**
+   - node_modules/follow-redirects/**
+   - node_modules/is-buffer/**
+   - node_modules/ms/**
 provider:
     name: aws
     runtime: nodejs8.10
 functions:
-  fetch:
-    handler: handler.getYelp
+  getYelp:
+    handler: handler.deviceData
     events:
       - http:
-          path: api/businesses
+          path: api/device/businesses/{lat}/{long}
           method: get
+          parameters:
+            paths:
+              lat: true
+              long: true
+  getBusiness:
+    handler: handler.getBusiness
+    events:
+      - http:
+          path: api/device/business/{id}
+          method: get
+          parameters:
+            paths:
+              id: true
