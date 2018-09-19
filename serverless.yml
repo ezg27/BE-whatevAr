@@ -11,5 +11,9 @@ functions:
     handler: handler.deviceData
     events:
       - http:
-          path: api/device
-          method: post
+          path: api/device/businesses/{lat}/{long}
+          method: get
+          parameters:
+            paths:
+              lat: true
+              long: true

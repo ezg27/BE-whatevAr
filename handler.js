@@ -3,18 +3,19 @@ const yelpKey = require('./config');
 const axios = require('axios');
 
 module.exports.deviceData = async event => {
-  const result = await getYelp(JSON.parse(event.body));
+  console.log(event)
+  const result = await getYelp(event.pathParameters);
   return result;
 };
 
-const getYelp = ({ latitude, longitude }) => {
+const getYelp = ({ lat, long }) => {
   const config = {
     headers: {
       Authorization: yelpKey
     },
     params: {
-      latitude: latitude,
-      longitude: longitude,
+      latitude: lat,
+      longitude: long,
       radius: 100,
       categories: 'bars,restaurants'
     }
@@ -26,7 +27,7 @@ const getYelp = ({ latitude, longitude }) => {
       return {
         statusCode: 200,
         body: JSON.stringify(
-          conversion(res.data.businesses, latitude, longitude)
+          conversion(res.data.businesses, lat, long)
         )
       };
     })
@@ -34,15 +35,16 @@ const getYelp = ({ latitude, longitude }) => {
 };
 
 const conversion = (businesses, latitude, longitude) => {
-  return businesses.map(business => {
+  return businesses.reduce((acc, business)=> {
     business.position = transformPointToAR(
       latitude,
       longitude,
       business.coordinates.latitude,
       business.coordinates.longitude
     );
-    return business;
-  });
+    acc[business.id] = business;
+    return acc;
+  }, {});
 };
 
 const latLongToMerc = (lat, long) => {
