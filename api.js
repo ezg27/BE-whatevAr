@@ -1,6 +1,6 @@
 const yelpKey = require('./config');
 const axios = require('axios');
-const { conversion } = require('./utils');
+const { conversion, formatHours } = require('./utils');
 
 module.exports.getYelp = ({ lat, long }) => {
   const config = {
@@ -41,12 +41,6 @@ module.exports.getBusinessData = ({ id, name }) => {
   const getFoodRating = axios.get(`http://api.ratings.food.gov.uk/Establishments?name=${name}&localAuthorityId=180`, rConfig)
   return Promise.all([getYelp, getFoodRating])
     .then(([{data}, RatingData]) => {
-      const hours = data.hours[0].open.map((day, i) => {
-        if (i != data.hours[0].open[i].day) return 'Closed';
-        return `${day.start.slice(0, 2)}:${day.start.slice(2)} - ${day.end.slice(0, 2)}:${day.end.slice(2)}`;
-      })
-      while (hours && hours.length !== 7) hours.push('Closed');
-      
       const theData = {
         id: data.id,
         name: data.name,
@@ -56,7 +50,7 @@ module.exports.getBusinessData = ({ id, name }) => {
         url: data.url,
         reviewCount: data.review_count,
         foodRating: RatingData.data.establishments ? RatingData.data.establishments[0].RatingKey : null,
-        hours: hours
+        hours: !data.hours ? null : formatHours(data.hours[0].open)
       }
       return {
         statusCode: 200,
