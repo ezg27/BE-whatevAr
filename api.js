@@ -25,18 +25,39 @@ module.exports.getYelp = ({ lat, long }) => {
     .catch(() => console.log('egggggsssss'));
 };
 
-module.exports.getBusinessData = ({ id }) => {
-  console.log(id)
-  const config = {
+module.exports.getBusinessData = ({ id, name }) => {
+  const yConfig = {
     headers: {
       Authorization: yelpKey
     }
   };
-  return axios.get(`https://api.yelp.com/v3/businesses/${id}`, config)
-  .then(res => {
-    return {
-      statusCode: 200,
-      body: JSON.stringify(res.data)
+  const rConfig = {
+    headers: {
+      'x-api-version': 2
     }
-  }).catch(console.log)
+  }
+  const getYelp = axios.get(`https://api.yelp.com/v3/businesses/${id}`, yConfig);
+  const getFoodRating = axios.get(`http://api.ratings.food.gov.uk/Establishments?name=${name}&localAuthorityId=180`, rConfig)
+  return Promise.all([getYelp, getFoodRating])
+    .then(([{data}, RatingData]) => {
+      const hours = data.hours[0].open.map(day => {
+        return `${day.start.slice(0, 2)}:${day.start.slice(2)} - ${day.end.slice(0, 2)}:${day.end.slice(2)}`
+      })
+      const theData = {
+        id: data.id,
+        name: data.name,
+        phone: data.phone,
+        photos: data.photos,
+        isOpen: data.hours[0].is_open_now,
+        url: data.url,
+        reviewCount: data.review_count,
+        foodRating: RatingData.data.establishments[0].RatingKey,
+        hours
+      }
+      return {
+        statusCode: 200,
+        body: JSON.stringify(theData)
+      }
+    })
+    .catch(console.log)
 }
