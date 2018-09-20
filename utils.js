@@ -45,4 +45,13 @@ const transformPointToAR = (
   return [objFinalPosX, 0, -objFinalPosZ];
 };
 
-module.exports = { conversion, latLongToMerc, transformPointToAR };
+const formatHours = (hoursData) => {
+  const days = hoursData.map((day, i) => {
+    if (i != hoursData[i].day) return 'Closed';
+    return `${day.start.slice(0, 2)}:${day.start.slice(2)} - ${day.end.slice(0, 2)}:${day.end.slice(2)}`;
+  })
+  while (days.length !== 7) days.push('Closed');
+  return days;
+}
+
+module.exports = { conversion, latLongToMerc, transformPointToAR, formatHours };
