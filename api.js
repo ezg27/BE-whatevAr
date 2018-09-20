@@ -36,7 +36,6 @@ module.exports.getBusinessData = ({ id, name }) => {
       'x-api-version': 2
     }
   }
-  console.log(name);
   const getYelp = axios.get(`https://api.yelp.com/v3/businesses/${id}`, yConfig);
   const getFoodRating = axios.get(`http://api.ratings.food.gov.uk/Establishments?name=${name}&localAuthorityId=180`, rConfig)
   return Promise.all([getYelp, getFoodRating])
