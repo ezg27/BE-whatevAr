@@ -7,7 +7,18 @@ const conversion = (businesses, latitude, longitude) => {
       business.coordinates.latitude,
       business.coordinates.longitude
     );
-    acc[business.id] = business;
+    const categories = business.categories.map(category => {
+      return category.title;
+    })
+    acc[business.id] = {
+      id: business.id,
+      name: business.name,
+      rating: business.rating * 2,
+      position: business.position,
+      price: business.price,
+      distance: Math.floor(business.distance),
+      categories: categories.slice(0, 3)
+    }
     return acc;
   }, {});
 };
