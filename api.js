@@ -41,25 +41,22 @@ module.exports.getBusinessData = ({ id, name }) => {
   const getFoodRating = axios.get(`http://api.ratings.food.gov.uk/Establishments?name=${name}&localAuthorityId=180`, rConfig)
   return Promise.all([getYelp, getFoodRating])
     .then(([{data}, RatingData]) => {
-      // const hours = data.hours[0].open.map(day => {
-      //   return `${day.start.slice(0, 2)}:${day.start.slice(2)} - ${day.end.slice(0, 2)}:${day.end.slice(2)}`
-      // })
-
-      const testHOurs = !data.hours ? null : data.hours[0].open.reduce((acc, day) => {
-        acc[day.day] = `${day.start.slice(0, 2)}:${day.start.slice(2)} - ${day.end.slice(0, 2)}:${day.end.slice(2)}`
-
-        return acc;
-      }, {})
+      const hours = data.hours[0].open.map((day, i) => {
+        if (i != data.hours[0].open[i].day) return 'Closed';
+        return `${day.start.slice(0, 2)}:${day.start.slice(2)} - ${day.end.slice(0, 2)}:${day.end.slice(2)}`;
+      })
+      while (hours && hours.length !== 7) hours.push('Closed');
+      
       const theData = {
         id: data.id,
         name: data.name,
         phone: data.phone,
         photos: data.photos,
-        // isOpen: data.hours[0].is_open_now,
+        isOpen: data.hours ? data.hours[0].is_open_now : null, 
         url: data.url,
         reviewCount: data.review_count,
-        foodRating: RatingData.data.establishments[0].RatingKey ? RatingData.data.establishments[0].RatingKey : null,
-        hours: testHOurs
+        foodRating: RatingData.data.establishments ? RatingData.data.establishments[0].RatingKey : null,
+        hours: hours
       }
       return {
         statusCode: 200,
