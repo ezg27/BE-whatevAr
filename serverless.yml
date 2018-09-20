@@ -27,8 +27,9 @@ functions:
     handler: handler.getBusiness
     events:
       - http:
-          path: api/device/business/{id}
+          path: api/device/business/{id}/{name}
           method: get
           parameters:
             paths:
               id: true
+              name: true

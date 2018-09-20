@@ -1,17 +1,3 @@
-const conversion = (businesses, latitude, longitude) => {
-  if (!businesses) return;
-  return businesses.reduce((acc, business) => {
-    business.position = transformPointToAR(
-      latitude,
-      longitude,
-      business.coordinates.latitude,
-      business.coordinates.longitude
-    );
-    acc[business.id] = business;
-    return acc;
-  }, {});
-};
-
 const latLongToMerc = (lat, long) => {
   const lon_rad = (long / 180.0) * Math.PI;
   const lat_rad = (lat / 180.0) * Math.PI;
@@ -34,4 +20,38 @@ const transformPointToAR = (
   return [objFinalPosX, 0, -objFinalPosZ];
 };
 
-module.exports = { conversion, latLongToMerc, transformPointToAR };
+module.exports.conversion = (businesses, latitude, longitude) => {
+  if (!businesses) return;
+  return businesses.reduce((acc, business) => {
+    business.position = transformPointToAR(
+      latitude,
+      longitude,
+      business.coordinates.latitude,
+      business.coordinates.longitude
+    );
+    const categories = business.categories.map(category => {
+      return category.title;
+    });
+    acc[business.id] = {
+      id: business.id,
+      name: business.name,
+      rating: business.rating * 2,
+      position: business.position,
+      price: business.price,
+      distance: Math.floor(business.distance),
+      categories: categories.slice(0, 3)
+    };
+    return acc;
+  }, {});
+};
+
+module.exports.formatHours = hoursData => {
+  const days = hoursData.map(
+    (day, i) =>
+      i !== hoursData[i].day
+        ? 'Closed'
+        : `${day.start.slice(0, 2)}:${day.start.slice(2)} - ${day.end.slice(0, 2)}:${day.end.slice(2)}`
+  );
+  while (days.length !== 7) days.push('Closed');
+  return days;
+};
