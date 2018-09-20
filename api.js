@@ -49,7 +49,9 @@ module.exports.getBusinessData = ({ id, name }) => {
         url: data.url,
         reviewCount: data.review_count,
         foodRating: RatingData.data.establishments ? RatingData.data.establishments[0].RatingKey : null,
-        hours: !data.hours ? null : formatHours(data.hours[0].open)
+        hours: !data.hours ? null : formatHours(data.hours[0].open),
+        address: data.location.address1,
+        postcode: data.location.zip_code
       }
       return {
         statusCode: 200,
