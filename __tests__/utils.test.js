@@ -72,18 +72,22 @@ describe('formatHours', () => {
   test('returns an array', () => {
     expect(Array.isArray(testfunc)).toBe(true);
   });
-  test('returns an array of strings', () => {
+  test('returns an array of 7 strings', () => {
     expect(typeof testfunc[0]).toBe('string');
+    expect(testfunc).toHaveLength(7);
   });
   test('returns an array of time string in specific format', () => {
     expect(testfunc[0]).toBe('11:00 - 00:00');
     expect(testfunc.indexOf('Closed')).toBe(-1)
   });
-  test('returns an array with added Closed element',() => {
+  test('commpletes week array if last element is missing',() => {
     const lastDayMissing = formatHours(hoursWoLastDay);
-    const midDayMissing = formatHours(hoursWoMidDay);
-    expect(lastDayMissing).toHaveLength(7);
     expect(lastDayMissing[6]).toBe('Closed');
+    expect(lastDayMissing).toHaveLength(7);
+  });
+  test('commpletes week array if multiple elements are missing', () => {
+    const midDayMissing = formatHours(hoursWoMidDay);
     expect(midDayMissing[3]).toBe('Closed');
+    expect(midDayMissing).toHaveLength(7);
   });
 });
