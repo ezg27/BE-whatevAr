@@ -3,6 +3,8 @@ region: eu-3
 package:
   exclude:
    - node_modules/**
+   - __mocks__/**
+   - __tests__/**
   include:
    - node_modules/axios/**
    - node_modules/debug/**
