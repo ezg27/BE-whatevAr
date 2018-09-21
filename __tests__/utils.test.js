@@ -1,5 +1,6 @@
 'use strict';
-const { conversion, latLongToMerc, transformPointToAR } = require('../utils');
+const { conversion, latLongToMerc, transformPointToAR, formatHours } = require('../utils');
+const { testHours, hoursWoLastDay, hoursWoMidDay} = require('../testData');
 
 describe('latLongToMerc', () => {
   test('returns an object', () => {
@@ -40,7 +41,13 @@ describe('conversion', () => {
       coordinates: {
         latitude: 53.4856191836238,
         longitude: -2.24017491981954
-      }
+      },
+      categories: [
+        {
+          alias: 'restaurants',
+          title: 'Restaurants'
+        }
+      ]
     }
   ];
   const funcCall = conversion(val, 53.4863, -2.2397);
@@ -57,5 +64,26 @@ describe('conversion', () => {
     expect(conversion(val, 53.4863, -2.2397)).toHaveProperty('a.position');
     expect(Array.isArray(funcCall.a.position)).toBe(true);
     expect(funcCall.a.position[0]).toBe(-52.86783247886342);
+  });
+});
+
+describe('formatHours', () => {
+  const testfunc = formatHours(testHours);
+  test('returns an array', () => {
+    expect(Array.isArray(testfunc)).toBe(true);
+  });
+  test('returns an array of strings', () => {
+    expect(typeof testfunc[0]).toBe('string');
+  });
+  test('returns an array of time string in specific format', () => {
+    expect(testfunc[0]).toBe('11:00 - 00:00');
+    expect(testfunc.indexOf('Closed')).toBe(-1)
+  });
+  test('returns an array with added Closed element',() => {
+    const lastDayMissing = formatHours(hoursWoLastDay);
+    const midDayMissing = formatHours(hoursWoMidDay);
+    expect(lastDayMissing).toHaveLength(7);
+    expect(lastDayMissing[6]).toBe('Closed');
+    expect(midDayMissing[3]).toBe('Closed');
   });
 });
