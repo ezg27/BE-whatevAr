@@ -26,7 +26,7 @@ module.exports.getYelp = ({ lat, long }) => {
       return {
         statusCode: err.response.status,
         body: JSON.stringify({
-          source: 'Yelp API',
+          source: 'Yelp businesses API call',
           message: err.response.statusText
         })
       };
@@ -75,5 +75,13 @@ module.exports.getBusinessData = ({ id, name }) => {
         body: JSON.stringify(theData)
       };
     })
-    .catch(console.log);
+    .catch(err => {
+      return {
+        statusCode: err.response.status,
+        body: JSON.stringify({
+          source: 'Yelp/Food-Hygiene specific business API call',
+          message: err.response.statusText
+        })
+      };
+    });
 };
