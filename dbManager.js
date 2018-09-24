@@ -32,3 +32,28 @@ module.exports.addUserData = (event, context, callback) => {
     callback(null, response);
   });
 };
+
+module.exports.getUserData = (event, context, callback) => {
+  const params = {
+    TableName: process.env.DYNAMODB_TABLE,
+    Key: {
+      id: event.pathParameters.id
+    }
+  };
+
+  dynamoDb.get(params, (error, result) => {
+    if (error) {
+      console.error(error);
+      callback(null, {
+        statusCode: error.statusCode || 501,
+        headers: { 'Content-Type': 'text/plain' },
+        body: "Couldn't fetch the todo item."
+      });
+    }
+    const response = {
+      statusCode: 200,
+      body: JSON.stringify(result.Item)
+    };
+    callback(null, response);
+  });
+};
