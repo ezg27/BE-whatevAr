@@ -33,26 +33,24 @@ functions:
       - http:
           path: api/device/businesses/{lat}/{long}
           method: get
-          parameters:
-            paths:
-              lat: true
-              long: true
   getBusiness:
     handler: handler.getBusiness
     events:
       - http:
           path: api/device/business/{id}/{name}
           method: get
-          parameters:
-            paths:
-              id: true
-              name: true
-  create:
+  createUser:
     handler: handler.addUser
     events:
       - http:
           path: api/login
           method: post
+  getUser:
+    handler: handler.getUser
+    events:
+      - http:
+          path: api/login/{id}
+          method: get
 resources:
   Resources:
     UserDynamoDbTable:
