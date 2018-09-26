@@ -10,7 +10,7 @@ module.exports.getYelp = ({ lat, long }) => {
     params: {
       latitude: lat,
       longitude: long,
-      radius: 100,
+      radius: 80,
       categories: 'bars,restaurants'
     }
   };
