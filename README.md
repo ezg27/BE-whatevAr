@@ -35,7 +35,7 @@ npm test
 
 This project is deployed on [AWS](https://aws.amazon.com/?nc2=h_lg)
 
-## Build with
+## Built with
 
 - aws-lambda
 - serverless
