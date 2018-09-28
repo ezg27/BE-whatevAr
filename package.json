@@ -1,0 +1,27 @@
+{
+  "name": "be-whatevar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "api.js",
+  "dependencies": {
+    "aws-sdk": "^2.320.0",
+    "axios": "^0.18.0",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ezg27/BE-whatevAr.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ezg27/BE-whatevAr/issues"
+  },
+  "homepage": "https://github.com/ezg27/BE-whatevAr#readme"
+}
